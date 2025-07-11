@@ -10,8 +10,6 @@ Node groups are deployed with autoscaling configuration.
 
 Workloads are deployed via Helm with readiness and liveness probes.
 
-Monitoring and logging are routed to AWS CloudWatch.
-
 A GitHub Actions workflow handles the provisioning and deployment pipeline.
 
 🚀 Application Deployment (via Helm)
