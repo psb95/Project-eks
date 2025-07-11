@@ -1,0 +1,40 @@
+
+#This workflow is test workflow, as the secrets are not present. 
+#This is just an example how does a workflow might look to autoate the helm install task
+name: Deploy Helm Chart
+
+on:
+  push:
+    paths:
+      - 'helm-chart/**'
+      - '.github/workflows/deploy-helm.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} ##Please define the acces key
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} ##Please define the secret key
+        aws-region: us-east-1
+
+    - name: Setup kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+
+    - name: Update kubeconfig
+      run: aws eks update-kubeconfig --name gradyentcluster --region eu-west-1
+
+    - name: Install Helm
+      uses: azure/setup-helm@v4
+
+    - name: Deploy with Helm
+      run: |
+        helm upgrade --install gradyent-app ./helm-chart
