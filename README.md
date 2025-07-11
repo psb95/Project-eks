@@ -14,3 +14,6 @@ EKS Cluster Provisioned    Node Group(s)   Helm Chart Deployed  App Pods Running
     |                  |
  Monitoring (CloudWatch)  Auto Scaling Enabled
   (optional)             (via node group settings)
+
+
+This is high overview archotecture diagram
